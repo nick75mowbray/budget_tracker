@@ -25,6 +25,11 @@ mongoose.connect(
   }
 );
 
+const mongooseConnection = mongoose.connection;
+mongooseConnection.on('error', console.error.bind(console, 'connection error:'));
+mongooseConnection.once('open', function() {
+  console.log("connected to mongoosedb!");
+});
 
 // routes
 app.use(require("./routes/api.js"));
