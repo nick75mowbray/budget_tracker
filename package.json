@@ -10,14 +10,14 @@
   },
   "repository": {
     "type": "git",
-    "url": ""
+    "url": "https://github.com/nick75mowbray/budget_tracker"
   },
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": ""
+    "url": "https://github.com/nick75mowbray/budget_tracker"
   },
-  "homepage": "https://github.com/coding-boot-camp/unit18hw#readme",
+  "homepage": "https://github.com/nick75mowbray/budget_tracker",
   "dependencies": {
     "compression": "^1.7.4",
     "express": "^4.17.1",
