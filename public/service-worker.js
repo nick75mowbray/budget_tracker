@@ -8,8 +8,10 @@ const iconFiles = iconSizes.map(
   (size) => `/icons/icon-${size}x${size}.png`
 );
 
+// set up files to be cached
 const staticFilesToPreCache = [
   "/",
+  "/index.html",  
   "/index.js",
   "/manifest.webmanifest",
 ].concat(iconFiles);
@@ -18,18 +20,19 @@ const staticFilesToPreCache = [
 // install
 self.addEventListener("install", function(evt) {
   evt.waitUntil(
+    // add files to cache
     caches.open(CACHE_NAME).then(cache => {
       console.log("Your files were pre-cached successfully!");
       return cache.addAll(staticFilesToPreCache);
     })
   );
-
   self.skipWaiting();
 });
 
 // activate
 self.addEventListener("activate", function(evt) {
   evt.waitUntil(
+    // delete old caches
     caches.keys().then(keyList => {
       return Promise.all(
         keyList.map(key => {
@@ -41,25 +44,25 @@ self.addEventListener("activate", function(evt) {
       );
     })
   );
-
   self.clients.claim();
 });
 
-// fetch
+// fetch and show cached files
 self.addEventListener("fetch", function(evt) {
   const {url} = evt.request;
   if (url.includes("/all") || url.includes("/find")) {
     evt.respondWith(
       caches.open(DATA_CACHE_NAME).then(cache => {
         return fetch(evt.request)
+
           .then(response => {
             // If the response was good, clone it and store it in the cache.
             if (response.status === 200) {
               cache.put(evt.request, response.clone());
             }
-
             return response;
           })
+
           .catch(err => {
             // Network request failed, try to get it from the cache.
             return cache.match(evt.request);
